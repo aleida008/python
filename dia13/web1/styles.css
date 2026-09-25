@@ -1,0 +1,35 @@
+.img-logo{
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    box-shadow: 5px 5px 2px rgb(216, 5, 216);
+}
+.img-slider{
+    height: 200px;
+    width: auto;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px #c20d37;
+}
+h3{
+    font-family: Arial, Helvetica, sans-serif;
+    color: rgb(250, 25, 21);
+    font-size: 28pt;
+}
+
+h1{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 26px;
+    color:skyblue;
+}
+
+form input, form button{
+    width: 200px;
+    padding: 20px;
+}
+form button{
+    background-color: aquamarine;
+    transition: 300ms;
+}
+form button:hover{
+    background-color: rgb(13, 145, 253);
+}

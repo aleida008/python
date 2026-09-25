@@ -1,0 +1,29 @@
+<h2>Listado</h2>
+<table border="1">
+    <tr>
+        <th>Código</th><th>Descripción</th><th>P. Costo</th>
+        <th>P. Venta</th><th>IVA</th><th>Stock</th><th>Unidad</th><th>Acciones</th>
+    </tr>
+    
+    <!-- Recorremos la lista de productos enviada desde la vista -->
+    {% for producto in productos %}
+    <tr>
+        <td>{{ producto.codigo_barra }}</td>
+        <td>{{ producto.descripcion }}</td>
+        <td>{{ producto.precio_costo }}</td>
+        <td>{{ producto.precio_venta }}</td>
+        <td>{{ producto.iva }}</td>
+        <td>{{ producto.stock }}</td>
+        <td>{{ producto.unidad_medida }}</td>
+        <td>
+            <!-- Enlaces con el ID correspondiente de cada producto -->
+            <a href="{% url 'productos_editar' producto.id %}">Editar</a> | 
+            <a href="{% url 'productos_eliminar' producto.id %}">Eliminar</a>
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="8">No hay productos registrados.</td>
+    </tr>
+    {% endfor %}
+</table>

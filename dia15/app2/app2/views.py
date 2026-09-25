@@ -1,0 +1,40 @@
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import Producto
+
+@login_required
+def index(request):
+    productos = Producto.objects.all()
+    return render(request, 'productos/index.html', {'productos': productos})
+
+@login_required
+def crear(request):
+    if request.method == 'POST':
+        # TODO: usar Producto.objects.create() con los campos del formulario,
+        # obtenidos desde request.POST['nombre_del_campo']
+        Producto.objects.create(
+            
+        )
+    return redirect('productos_index')
+
+@login_required
+def editar(request, id):
+    producto = get_object_or_404(Producto, id=id)
+    if request.method == 'POST':
+        producto.descripcion = request.POST['descripcion']
+        producto.precio_costo = request.POST['precio_costo']
+        producto.precio_venta = request.POST['precio_venta']
+        producto.iva = request.POST['iva']
+        producto.stock = request.POST['stock']
+        producto.unidad_medida = request.POST['unidad_medida']
+        # TODO: guardar los cambios con producto.save()
+        
+        return redirect('productos_index')
+    return render(request, 'productos/editar.html', {'producto': producto})
+
+@login_required
+def eliminar(request, id):
+    producto = get_object_or_404(Producto, id=id)
+    # TODO: eliminar el producto con producto.delete()
+    
+    return redirect('productos_index')

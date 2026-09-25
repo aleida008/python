@@ -1,0 +1,316 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐱 Cat Pizza 🍕</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #ff9a3c, #ff5e62);
+            color: white;
+            text-align: center;
+        }
+
+        header {
+            background: #4a1c40;
+            padding: 20px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 38px;
+        }
+
+        header p {
+            margin: 8px;
+            font-size: 18px;
+        }
+
+        .informacion {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin: 20px;
+        }
+
+        .tarjeta {
+            background: white;
+            color: #4a1c40;
+            padding: 12px 25px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        #juego {
+            position: relative;
+            width: 90%;
+            max-width: 700px;
+            height: 450px;
+            margin: 20px auto;
+            background: linear-gradient(#75d5ff, #d9f7ff);
+            border: 8px solid #4a1c40;
+            border-radius: 25px;
+            overflow: hidden;
+        }
+
+        #gato {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 65px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .pizza {
+            position: absolute;
+            font-size: 45px;
+            top: -60px;
+            user-select: none;
+        }
+
+        .mensaje {
+            font-size: 22px;
+            font-weight: bold;
+            margin: 15px;
+            min-height: 30px;
+        }
+
+        button {
+            border: none;
+            padding: 14px 30px;
+            border-radius: 30px;
+            background: #ffe066;
+            color: #4a1c40;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 25px;
+        }
+
+        button:hover {
+            background: white;
+            transform: scale(1.05);
+        }
+
+        .instrucciones {
+            background: rgba(74, 28, 64, 0.9);
+            padding: 20px;
+            margin-top: 25px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>🐱 Cat Pizza 🍕</h1>
+        <p>¡Ayuda al gatito a atrapar las pizzas!</p>
+    </header>
+
+    <div class="informacion">
+        <div class="tarjeta">
+            🍕 Puntos: <span id="puntos">0</span>
+        </div>
+
+        <div class="tarjeta">
+            ❤️ Vidas: <span id="vidas">3</span>
+        </div>
+    </div>
+
+    <div id="juego">
+
+        <div id="gato">🐱</div>
+
+    </div>
+
+    <div class="mensaje" id="mensaje">
+        ¡Prepárate para jugar! 🎮
+    </div>
+
+    <button id="iniciar">
+        🍕 Iniciar juego
+    </button>
+
+    <div class="instrucciones">
+        <h2>🎮 ¿Cómo jugar?</h2>
+        <p>
+            Mueve el gatito con las teclas
+            ⬅️ y ➡️
+        </p>
+
+        <p>
+            También puedes hacer clic en el gatito
+            para moverlo.
+        </p>
+
+        <p>
+            🍕 ¡Atrapa las pizzas para ganar puntos!
+        </p>
+    </div>
+
+    <script>
+
+        const juego = document.getElementById("juego");
+        const gato = document.getElementById("gato");
+        const puntosTexto = document.getElementById("puntos");
+        const vidasTexto = document.getElementById("vidas");
+        const mensaje = document.getElementById("mensaje");
+        const boton = document.getElementById("iniciar");
+
+        let puntos = 0;
+        let vidas = 3;
+        let jugando = false;
+        let posicionGato = 50;
+        let intervalo;
+
+        // Mover gato con teclado
+        document.addEventListener("keydown", function(evento) {
+
+            if (!jugando) return;
+
+            if (evento.key === "ArrowLeft") {
+                posicionGato -= 5;
+            }
+
+            if (evento.key === "ArrowRight") {
+                posicionGato += 5;
+            }
+
+            // Evitar que salga de la pantalla
+            if (posicionGato < 5) {
+                posicionGato = 5;
+            }
+
+            if (posicionGato > 95) {
+                posicionGato = 95;
+            }
+
+            gato.style.left = posicionGato + "%";
+        });
+
+
+        // Iniciar juego
+        boton.addEventListener("click", iniciarJuego);
+
+
+        function iniciarJuego() {
+
+            puntos = 0;
+            vidas = 3;
+            posicionGato = 50;
+            jugando = true;
+
+            puntosTexto.textContent = puntos;
+            vidasTexto.textContent = vidas;
+            mensaje.textContent = "¡Atrapa las pizzas! 🍕";
+
+            gato.style.left = "50%";
+
+            boton.textContent = "🔄 Reiniciar juego";
+
+            clearInterval(intervalo);
+
+            intervalo = setInterval(crearPizza, 900);
+        }
+
+
+        function crearPizza() {
+
+            if (!jugando) return;
+
+            const pizza = document.createElement("div");
+
+            pizza.classList.add("pizza");
+            pizza.textContent = "🍕";
+
+            // Posición horizontal aleatoria
+            pizza.style.left = Math.random() * 90 + "%";
+
+            juego.appendChild(pizza);
+
+            let posicion = -50;
+
+            const movimiento = setInterval(function() {
+
+                if (!jugando) {
+                    clearInterval(movimiento);
+                    pizza.remove();
+                    return;
+                }
+
+                posicion += 5;
+
+                pizza.style.top = posicion + "px";
+
+                // Comprobar si llegó al gato
+                const gatoRect = gato.getBoundingClientRect();
+                const pizzaRect = pizza.getBoundingClientRect();
+
+                if (
+                    pizzaRect.bottom >= gatoRect.top &&
+                    pizzaRect.left < gatoRect.right &&
+                    pizzaRect.right > gatoRect.left
+                ) {
+
+                    puntos++;
+                    puntosTexto.textContent = puntos;
+
+                    mensaje.textContent = "¡Ñam! 🍕 +1 punto";
+
+                    clearInterval(movimiento);
+                    pizza.remove();
+
+                    return;
+                }
+
+                // Si la pizza se escapa
+                if (posicion > 450) {
+
+                    vidas--;
+                    vidasTexto.textContent = vidas;
+
+                    mensaje.textContent = "¡Se escapó una pizza! 😿";
+
+                    clearInterval(movimiento);
+                    pizza.remove();
+
+                    if (vidas <= 0) {
+                        terminarJuego();
+                    }
+                }
+
+            }, 50);
+        }
+
+
+        function terminarJuego() {
+
+            jugando = false;
+
+            clearInterval(intervalo);
+
+            mensaje.textContent =
+                "🎮 ¡Fin del juego! Conseguí " +
+                puntos +
+                " puntos. 🍕";
+
+            boton.textContent = "🔄 Jugar nuevamente";
+        }
+
+    </script>
+
+</body>
+</html>
+```
